@@ -6,51 +6,27 @@ import { Map } from "./Map";
 import type { FoodTruck } from "@/types/food-truck";
 import type { Coordinates } from "@/types/coordinates";
 
-interface MockComponentProps {
-  children?: React.ReactNode;
-  [key: string]: unknown;
-}
+// Mock config state
+let mockApiKey = "test-api-key";
+const mockMapId = "test-map-id";
 
-interface PinProps {
-  background?: string;
-  glyphColor?: string;
-  borderColor?: string;
-  [key: string]: unknown;
-}
+// Mock the maps config
+jest.mock("@/config/maps", () => ({
+  get mapsConfig() {
+    return {
+      apiKey: mockApiKey,
+      mapId: mockMapId
+    };
+  }
+}));
 
-jest.mock("@vis.gl/react-google-maps", () => {
-  const BaseComponent = ({ children, ...props }: MockComponentProps) => {
-    // Filter out problematic props
-    const {
-      apiKey: _apiKey,
-      mapId: _mapId,
-      defaultZoom: _defaultZoom,
-      defaultCenter: _defaultCenter,
-      gestureHandling: _gestureHandling,
-      clickableIcons: _clickableIcons,
-      keyboardShortcuts: _keyboardShortcuts,
-      zoomControl: _zoomControl,
-      onCloseClick: _onCloseClick,
-      ...rest
-    } = props;
-    return <div {...rest}>{children}</div>;
-  };
-  BaseComponent.displayName = 'MockComponent';
-
-  const PinComponent = ({ background: _bg, glyphColor: _gc, borderColor: _bc, ...props }: PinProps) => {
-    // Render pin without passing custom props to DOM
-    return <div data-testid="map-pin" {...props} />;
-  };
-  PinComponent.displayName = 'MockPin';
-
-  return {
-    APIProvider: BaseComponent,
-    Map: BaseComponent,
-    AdvancedMarker: BaseComponent,
-    Pin: PinComponent,
-    InfoWindow: BaseComponent,
-  };
-});
+jest.mock("@vis.gl/react-google-maps", () => ({
+  APIProvider: ({ children }: { children: React.ReactNode }) => <div>{children}</div>,
+  Map: ({ children }: { children: React.ReactNode }) => <div>{children}</div>,
+  AdvancedMarker: ({ children, ...props }: { children: React.ReactNode; [key: string]: unknown }) => <div {...props}>{children}</div>,
+  Pin: () => <div data-testid="map-pin" />,
+  InfoWindow: ({ children }: { children: React.ReactNode }) => <div>{children}</div>,
+}));
 
 const mockTrucks: FoodTruck[] = [
   {
@@ -68,50 +44,55 @@ const mockUserLocation: Coordinates = {
 };
 
 describe("Map", () => {
-  const originalEnv = process.env;
+  let originalApiKey: string;
 
   beforeEach(() => {
     jest.resetModules();
-    process.env = {
-      ...originalEnv,
-      NEXT_PUBLIC_GOOGLE_MAPS_API_KEY: "test-api-key",
-    };
+    originalApiKey = mockApiKey;
   });
 
   afterEach(() => {
-    process.env = originalEnv;
+    mockApiKey = originalApiKey;
   });
 
-  it("renders a message if API key is missing", () => {
-    delete process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY;
-    render(<Map trucks={[]} userLocation={mockUserLocation} />);
-    expect(
-      screen.getByText(/Set/i)
-    ).toBeInTheDocument();
+  describe("when API key is missing", () => {
+    beforeEach(() => {
+      mockApiKey = "";
+    });
+
+    it("renders a message", () => {
+      render(<Map trucks={[]} userLocation={mockUserLocation} />);
+      
+      // Check for the error message container
+      const container = screen.getByRole('alert', { name: /api key/i });
+      expect(container).toHaveTextContent('Set NEXT_PUBLIC_GOOGLE_MAPS_API_KEY to display the map');
+    });
   });
 
-  it("renders the map with markers", () => {
-    render(<Map trucks={mockTrucks} userLocation={mockUserLocation} />);
-
-    // Check user location marker
-    const userMarker = screen.getByTitle("Your location");
-    expect(userMarker).toBeInTheDocument();
-    expect(userMarker.querySelector('[data-testid="map-pin"]')).toBeInTheDocument();
-
-    // Check food truck marker
-    const truckMarker = screen.getByTitle("Truck A — 123 Main St");
-    expect(truckMarker).toBeInTheDocument();
-    expect(truckMarker.querySelector('[data-testid="map-pin"]')).toBeInTheDocument();
-  });
-
-  it("shows an info window when a marker is clicked", () => {
-    render(<Map trucks={mockTrucks} userLocation={mockUserLocation} />);
-
-    const marker = screen.getByTitle("Truck A — 123 Main St");
-    fireEvent.click(marker);
-
-    expect(screen.getByText("Truck A")).toBeInTheDocument();
-    expect(screen.getByText("tacos, burritos")).toBeInTheDocument();
+  describe("when API key is present", () => {
+    it("renders the map with markers", () => {
+      render(<Map trucks={mockTrucks} userLocation={mockUserLocation} />);
+  
+      // Check user location marker
+      const userMarker = screen.getByTitle("Your location");
+      expect(userMarker).toBeInTheDocument();
+      expect(userMarker.querySelector('[data-testid="map-pin"]')).toBeInTheDocument();
+  
+      // Check food truck marker
+      const truckMarker = screen.getByTitle("Truck A — 123 Main St");
+      expect(truckMarker).toBeInTheDocument();
+      expect(truckMarker.querySelector('[data-testid="map-pin"]')).toBeInTheDocument();
+    });
+  
+    it("shows an info window when a marker is clicked", () => {
+      render(<Map trucks={mockTrucks} userLocation={mockUserLocation} />);
+  
+      const marker = screen.getByTitle("Truck A — 123 Main St");
+      fireEvent.click(marker);
+  
+      expect(screen.getByText("Truck A")).toBeInTheDocument();
+      expect(screen.getByText("tacos, burritos")).toBeInTheDocument();
+    });
   });
 });
 
