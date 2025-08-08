@@ -9,10 +9,10 @@ import {
   InfoWindow,
 } from "@vis.gl/react-google-maps";
 import type { MapProps, MapTruckMarker } from "../../types/map";
+import { mapsConfig } from "@/config/maps";
 
 export const Map = ({ trucks, userLocation }: MapProps) => {
-  const apiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY;
-  const mapId = process.env.NEXT_PUBLIC_GOOGLE_MAPS_MAP_ID;
+  const { apiKey, mapId } = mapsConfig;
 
   const mapCenter = useMemo(
     () => ({ lat: userLocation.latitude, lng: userLocation.longitude }),
@@ -23,7 +23,11 @@ export const Map = ({ trucks, userLocation }: MapProps) => {
 
   if (!apiKey) {
     return (
-      <div className="p-4 border rounded bg-yellow-50 text-yellow-900">
+      <div 
+        className="p-4 border rounded bg-yellow-50 text-yellow-900"
+        role="alert"
+        aria-label="API key missing"
+      >
         Set <code>NEXT_PUBLIC_GOOGLE_MAPS_API_KEY</code> to display the map.
       </div>
     );
