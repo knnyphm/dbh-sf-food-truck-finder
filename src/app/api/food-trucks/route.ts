@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import type { RawFoodTruck } from "@/types/food-truck";
+import type { RawFoodTruck } from "./types";
 
 const ENDPOINT_URL =
   "https://data.sfgov.org/resource/rqzj-sfat.json";

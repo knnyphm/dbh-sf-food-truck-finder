@@ -2,9 +2,9 @@
 
 import { render, screen, fireEvent } from "@testing-library/react";
 import "@testing-library/jest-dom";
-import { Map } from "./Map";
-import type { FoodTruck } from "@/types/food-truck";
-import type { Coordinates } from "@/types/coordinates";
+import { FoodTruckMap } from "./FoodTruckMap";
+import type { FoodTruck } from "../FoodTruckList/FoodTruckList.types";
+import type { Coordinates } from "./FoodTruckMap.types";
 
 // Mock config state
 let mockApiKey = "test-api-key";
@@ -43,7 +43,7 @@ const mockUserLocation: Coordinates = {
   longitude: -122.4194,
 };
 
-describe("Map", () => {
+describe("FoodTruckMap", () => {
   let originalApiKey: string;
 
   beforeEach(() => {
@@ -61,7 +61,7 @@ describe("Map", () => {
     });
 
     it("renders a message", () => {
-      render(<Map trucks={[]} userLocation={mockUserLocation} />);
+      render(<FoodTruckMap trucks={[]} userLocation={mockUserLocation} />);
       
       // Check for the error message container
       const container = screen.getByRole('alert', { name: /api key/i });
@@ -71,7 +71,7 @@ describe("Map", () => {
 
   describe("when API key is present", () => {
     it("renders the map with markers", () => {
-      render(<Map trucks={mockTrucks} userLocation={mockUserLocation} />);
+      render(<FoodTruckMap trucks={mockTrucks} userLocation={mockUserLocation} />);
   
       // Check user location marker
       const userMarker = screen.getByTitle("Your location");
@@ -85,14 +85,13 @@ describe("Map", () => {
     });
   
     it("shows an info window when a marker is clicked", () => {
-      render(<Map trucks={mockTrucks} userLocation={mockUserLocation} />);
+      render(<FoodTruckMap trucks={mockTrucks} userLocation={mockUserLocation} />);
   
       const marker = screen.getByTitle("Truck A — 123 Main St");
       fireEvent.click(marker);
   
-      expect(screen.getByText("Truck A")).toBeInTheDocument();
+      expect(screen.getByText("123 Main St")).toBeInTheDocument();
       expect(screen.getByText("tacos, burritos")).toBeInTheDocument();
     });
   });
 });
-

@@ -1,9 +1,9 @@
 import { renderHook, act } from '@testing-library/react';
-import { useFoodTrucks } from './useFoodTrucks';
-import { fetchNearbyTrucks } from '@/lib/foodTrucks';
+import { useFoodTruckFinder } from './useFoodTruckFinder';
+import { fetchNearbyTrucks } from '@/utils/foodTruckLocator';
 
-// Mock the foodTrucks module
-jest.mock('@/lib/foodTrucks', () => ({
+// Mock the foodTruckLocator module
+jest.mock('@/utils/foodTruckLocator', () => ({
   fetchNearbyTrucks: jest.fn(),
 }));
 
@@ -24,7 +24,7 @@ beforeAll(() => {
   });
 });
 
-describe('useFoodTrucks', () => {
+describe('useFoodTruckFinder', () => {
   const mockTrucks = [
     {
       applicant: 'Test Truck 1',
@@ -48,7 +48,7 @@ describe('useFoodTrucks', () => {
   });
 
   it('should initialize with default values', () => {
-    const { result } = renderHook(() => useFoodTrucks());
+    const { result } = renderHook(() => useFoodTruckFinder());
 
     expect(result.current.trucks).toEqual([]);
     expect(result.current.loading).toBe(false);
@@ -58,7 +58,7 @@ describe('useFoodTrucks', () => {
   });
 
   it('should load trucks successfully', async () => {
-    const { result } = renderHook(() => useFoodTrucks());
+    const { result } = renderHook(() => useFoodTruckFinder());
 
     await act(async () => {
       await result.current.loadTrucks(37.7749, -122.4194);
@@ -75,7 +75,7 @@ describe('useFoodTrucks', () => {
       setTimeout(() => success({ coords: mockCoords }), 0);
     });
 
-    const { result } = renderHook(() => useFoodTrucks());
+    const { result } = renderHook(() => useFoodTruckFinder());
 
     await act(async () => {
       const trucksPromise = result.current.getNearbyTrucks();
@@ -93,7 +93,7 @@ describe('useFoodTrucks', () => {
       error(mockError)
     );
 
-    const { result } = renderHook(() => useFoodTrucks());
+    const { result } = renderHook(() => useFoodTruckFinder());
 
     await act(async () => {
       const trucks = await result.current.getNearbyTrucks();
@@ -106,7 +106,7 @@ describe('useFoodTrucks', () => {
   });
 
   it('should update radius and reload trucks', async () => {
-    const { result } = renderHook(() => useFoodTrucks());
+    const { result } = renderHook(() => useFoodTruckFinder());
     const newRadius = 2;
 
     await act(async () => {

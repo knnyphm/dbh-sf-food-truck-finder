@@ -1,4 +1,4 @@
-import type { PageLayoutProps } from "../../types/components";
+import type { PageLayoutProps } from "./PageLayout.types";
 
 export const PageLayout = ({ children }: PageLayoutProps) => {
   return (

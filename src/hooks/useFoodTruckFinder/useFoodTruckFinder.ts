@@ -1,11 +1,10 @@
 "use client";
 
 import { useCallback, useState } from "react";
-import type { FoodTruck } from "@/types/food-truck";
-import type { Coordinates } from "@/types/coordinates";
-import { fetchNearbyTrucks } from "@/lib/foodTrucks";
+import type { FoodTruck, Coordinates } from "./useFoodTruckFinder.types";
+import { fetchNearbyTrucks } from "@/utils/foodTruckLocator";
 
-export function useFoodTrucks() {
+export const useFoodTruckFinder = () => {
   const [trucks, setTrucks] = useState<FoodTruck[]>([]);
   const [loading, setLoading] = useState(false);
   const [userLocation, setUserLocation] = useState<Coordinates | null>(null);
@@ -33,31 +32,30 @@ export function useFoodTrucks() {
     [radiusMiles]
   );
 
-  const getCurrentLocation = useCallback(() => {
+  const getCurrentLocation = useCallback(async (): Promise<Coordinates> => {
     setLocating(true);
     if (!navigator.geolocation) {
       setLocating(false);
-      return Promise.reject(new Error("Geolocation not supported"));
+      throw new Error("Geolocation not supported");
     }
 
-    return new Promise<Coordinates>((resolve, reject) => {
-      navigator.geolocation.getCurrentPosition(
-        ({ coords: { latitude, longitude } }) =>
-          resolve({ latitude, longitude }),
-        (error) => reject(error)
-      );
-    })
-      .then((coords) => {
-        setUserLocation(coords);
-        return coords;
-      })
-      .catch((error) => {
-        console.error("Geolocation error:", error);
-        throw error;
-      })
-      .finally(() => {
-        setLocating(false);
+    try {
+      const position = await new Promise<GeolocationPosition>((resolve, reject) => {
+        navigator.geolocation.getCurrentPosition(resolve, reject);
       });
+      
+      const coords = { 
+        latitude: position.coords.latitude, 
+        longitude: position.coords.longitude 
+      };
+      setUserLocation(coords);
+      setLocating(false);
+      return coords;
+    } catch (error) {
+      console.error("Geolocation error:", error);
+      setLocating(false);
+      throw error;
+    }
   }, []);
 
   const getNearbyTrucks = useCallback(async () => {

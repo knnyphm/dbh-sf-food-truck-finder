@@ -8,10 +8,10 @@ import {
   Pin,
   InfoWindow,
 } from "@vis.gl/react-google-maps";
-import type { MapProps, MapTruckMarker } from "../../types/map";
+import type { MapProps, MapTruckMarker } from "./FoodTruckMap.types";
 import { mapsConfig } from "@/config/maps";
 
-export const Map = ({ trucks, userLocation }: MapProps) => {
+export const FoodTruckMap = ({ trucks, userLocation }: MapProps) => {
   const { apiKey, mapId } = mapsConfig;
 
   const mapCenter = useMemo(
@@ -19,11 +19,11 @@ export const Map = ({ trucks, userLocation }: MapProps) => {
     [userLocation.latitude, userLocation.longitude]
   );
 
-  const [selected, setSelected] = useState<MapTruckMarker | null>(null);
+  const [selectedTruck, setSelectedTruck] = useState<MapTruckMarker | null>(null);
 
   if (!apiKey) {
     return (
-      <div 
+      <div
         className="p-4 border rounded bg-yellow-50 text-yellow-900"
         role="alert"
         aria-label="API key missing"
@@ -35,7 +35,7 @@ export const Map = ({ trucks, userLocation }: MapProps) => {
 
   return (
     <APIProvider apiKey={apiKey}>
-      <div style={{ height: "50vh", width: "100%" }}>
+      <div className="h-80 lg:h-[80vh] w-full">
         <GoogleMap
           key={`${mapCenter.lat}-${mapCenter.lng}`}
           style={{ height: "100%", width: "100%", borderRadius: 8 }}
@@ -64,23 +64,23 @@ export const Map = ({ trucks, userLocation }: MapProps) => {
               key={`${t.applicant}-${idx}`}
               position={{ lat: t.latitude, lng: t.longitude }}
               title={`${t.applicant} — ${t.locationdescription}`}
-              onClick={() => setSelected(t)}
+              onClick={() => setSelectedTruck(t)}
             >
               <Pin background="#dc2626" glyphColor="#ffffff" borderColor="#dc2626" />
             </AdvancedMarker>
           ))}
 
-          {selected && (
+          {selectedTruck && (
             <InfoWindow
-              position={{ lat: selected.latitude, lng: selected.longitude }}
-              onCloseClick={() => setSelected(null)}
+              position={{ lat: selectedTruck.latitude, lng: selectedTruck.longitude }}
+              onCloseClick={() => setSelectedTruck(null)}
+              headerContent={<div className="font-semibold text-lg">{selectedTruck.applicant}</div>}
             >
               <div className="max-w-[240px] text-black">
-                <div className="font-semibold">{selected.applicant}</div>
-                <div className="text-xs">{selected.locationdescription}</div>
-                {selected.fooditems && (
+                <div className="text-xs">{selectedTruck.locationdescription}</div>
+                {selectedTruck.fooditems && (
                   <div className="text-xs italic mt-1 whitespace-pre-wrap break-words">
-                    {selected.fooditems}
+                    {selectedTruck.fooditems}
                   </div>
                 )}
               </div>
@@ -91,5 +91,3 @@ export const Map = ({ trucks, userLocation }: MapProps) => {
     </APIProvider>
   );
 }
-
-

@@ -1,8 +1,9 @@
-import type { FoodTruckListProps } from "../../types/components";
+import type { FoodTruckListProps } from "./FoodTruckList.types";
+import { FoodTruckListSkeleton } from "./FoodTruckList.skeleton";
 
 export const FoodTruckList = ({ trucks, loading }: FoodTruckListProps) => {
   if (loading) {
-    return <p>Loading nearby food trucks…</p>;
+    return <FoodTruckListSkeleton />;
   }
 
   if (trucks.length === 0) {

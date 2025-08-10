@@ -2,11 +2,11 @@
 
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import { FoodTruckFinder } from "./FoodTruckFinder";
-import { useFoodTrucks } from "@/hooks/useFoodTrucks";
-import type { FoodTruck } from "@/types/food-truck";
+import { useFoodTruckFinder } from "@/hooks/useFoodTruckFinder";
+import type { FoodTruck } from "./FoodTruckFinder.types";
 
-jest.mock("@/hooks/useFoodTrucks", () => ({
-  useFoodTrucks: jest.fn(),
+jest.mock("@/hooks/useFoodTruckFinder", () => ({
+  useFoodTruckFinder: jest.fn(),
 }));
 
 const mockTrucks: FoodTruck[] = [
@@ -27,10 +27,10 @@ const mockTrucks: FoodTruck[] = [
 ];
 
 describe("FoodTruckFinder", () => {
-  const mockUseFoodTrucks = useFoodTrucks as jest.Mock;
+  const mockUseFoodTruckFinder = useFoodTruckFinder as jest.Mock;
 
   beforeEach(() => {
-    mockUseFoodTrucks.mockReturnValue({
+    mockUseFoodTruckFinder.mockReturnValue({
       trucks: mockTrucks,
       loading: false,
       userLocation: null,
@@ -59,7 +59,7 @@ describe("FoodTruckFinder", () => {
   });
 
   it("filters trucks by food item", async () => {
-    mockUseFoodTrucks.mockReturnValue({
+    mockUseFoodTruckFinder.mockReturnValue({
       trucks: mockTrucks,
       loading: false,
       userLocation: { latitude: 37.7749, longitude: -122.4194 },
@@ -84,7 +84,7 @@ describe("FoodTruckFinder", () => {
 
   it('calls getNearbyTrucks when "Use My Location" is clicked', async () => {
     const getNearbyTrucks = jest.fn().mockResolvedValue(mockTrucks);
-    mockUseFoodTrucks.mockReturnValue({
+    mockUseFoodTruckFinder.mockReturnValue({
       trucks: [],
       loading: false,
       userLocation: null,

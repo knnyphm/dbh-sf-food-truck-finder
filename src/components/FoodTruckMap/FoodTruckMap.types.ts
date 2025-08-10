@@ -1,4 +1,7 @@
-import type { Coordinates } from "./coordinates";
+export interface Coordinates {
+  latitude: number;
+  longitude: number;
+}
 
 export interface MapTruckMarker extends Coordinates {
   applicant: string;
