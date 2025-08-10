@@ -43,12 +43,15 @@ const mockUserLocation: Coordinates = {
   longitude: -122.4194,
 };
 
+const mockOnTruckSelect = jest.fn();
+
 describe("FoodTruckMap", () => {
   let originalApiKey: string;
 
   beforeEach(() => {
     jest.resetModules();
     originalApiKey = mockApiKey;
+    mockOnTruckSelect.mockClear();
   });
 
   afterEach(() => {
@@ -61,17 +64,31 @@ describe("FoodTruckMap", () => {
     });
 
     it("renders a message", () => {
-      render(<FoodTruckMap trucks={[]} userLocation={mockUserLocation} />);
+      render(
+        <FoodTruckMap 
+          trucks={[]} 
+          userLocation={mockUserLocation} 
+          selectedTruck={null}
+          onTruckSelect={mockOnTruckSelect}
+        />
+      );
       
       // Check for the error message container
       const container = screen.getByRole('alert', { name: /api key/i });
-      expect(container).toHaveTextContent('Set NEXT_PUBLIC_GOOGLE_MAPS_API_KEY to display the map');
+      expect(container).toHaveTextContent('Please set the required API key to display the map');
     });
   });
 
   describe("when API key is present", () => {
     it("renders the map with markers", () => {
-      render(<FoodTruckMap trucks={mockTrucks} userLocation={mockUserLocation} />);
+      render(
+        <FoodTruckMap 
+          trucks={mockTrucks} 
+          userLocation={mockUserLocation} 
+          selectedTruck={null}
+          onTruckSelect={mockOnTruckSelect}
+        />
+      );
   
       // Check user location marker
       const userMarker = screen.getByTitle("Your location");
@@ -85,10 +102,30 @@ describe("FoodTruckMap", () => {
     });
   
     it("shows an info window when a marker is clicked", () => {
-      render(<FoodTruckMap trucks={mockTrucks} userLocation={mockUserLocation} />);
+      render(
+        <FoodTruckMap 
+          trucks={mockTrucks} 
+          userLocation={mockUserLocation} 
+          selectedTruck={null}
+          onTruckSelect={mockOnTruckSelect}
+        />
+      );
   
       const marker = screen.getByTitle("Truck A — 123 Main St");
       fireEvent.click(marker);
+  
+      expect(mockOnTruckSelect).toHaveBeenCalledWith(mockTrucks[0]);
+    });
+
+    it("shows info window when a truck is selected", () => {
+      render(
+        <FoodTruckMap 
+          trucks={mockTrucks} 
+          userLocation={mockUserLocation} 
+          selectedTruck={mockTrucks[0]}
+          onTruckSelect={mockOnTruckSelect}
+        />
+      );
   
       expect(screen.getByText("123 Main St")).toBeInTheDocument();
       expect(screen.getByText("tacos, burritos")).toBeInTheDocument();

@@ -12,4 +12,6 @@ export interface MapTruckMarker extends Coordinates {
 export interface MapProps {
   trucks: MapTruckMarker[];
   userLocation: Coordinates;
+  selectedTruck: MapTruckMarker | null;
+  onTruckSelect: (truck: MapTruckMarker | null) => void;
 }

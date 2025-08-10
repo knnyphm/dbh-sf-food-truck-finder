@@ -26,8 +26,9 @@ export const FoodTruckFinder = () => {
   
   const [filteredFoodTrucks, setFilteredFoodTrucks] = useState<FoodTruck[]>([]);
   const [foodItemSearchTerm, setFoodItemSearchTerm] = useState("");
+  const [selectedTruck, setSelectedTruck] = useState<FoodTruck | null>(null);
 
-  const DynamicFoodTruckMap = useMemo(
+  const FoodTruckMap = useMemo(
     () =>
       dynamic(async () => {
         const mapModule = await import("@/components/FoodTruckMap");
@@ -130,12 +131,22 @@ export const FoodTruckFinder = () => {
       {userLocation && (
         <div className="flex flex-col lg:flex-row gap-4 lg:gap-6">
           <div className="lg:w-2/3">
-            <DynamicFoodTruckMap trucks={filteredFoodTrucks} userLocation={userLocation} />
+            <FoodTruckMap 
+              trucks={filteredFoodTrucks} 
+              userLocation={userLocation} 
+              selectedTruck={selectedTruck}
+              onTruckSelect={setSelectedTruck}
+            />
           </div>
 
           <div className="lg:w-1/3">
             <div className="h-[calc(100vh-28rem)] lg:h-[80vh] overflow-y-auto">
-              <FoodTruckList trucks={filteredFoodTrucks} loading={loading} />
+              <FoodTruckList 
+                trucks={filteredFoodTrucks} 
+                loading={loading}
+                selectedTruck={selectedTruck}
+                onTruckSelect={setSelectedTruck}
+              />
             </div>
           </div>
         </div>

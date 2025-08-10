@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useMemo } from "react";
 import {
   APIProvider,
   Map as GoogleMap,
@@ -8,18 +8,16 @@ import {
   Pin,
   InfoWindow,
 } from "@vis.gl/react-google-maps";
-import type { MapProps, MapTruckMarker } from "./FoodTruckMap.types";
+import type { MapProps } from "./FoodTruckMap.types";
 import { mapsConfig } from "@/config/maps";
 
-export const FoodTruckMap = ({ trucks, userLocation }: MapProps) => {
+export const FoodTruckMap = ({ trucks, userLocation, selectedTruck, onTruckSelect }: MapProps) => {
   const { apiKey, mapId } = mapsConfig;
 
   const mapCenter = useMemo(
     () => ({ lat: userLocation.latitude, lng: userLocation.longitude }),
     [userLocation.latitude, userLocation.longitude]
   );
-
-  const [selectedTruck, setSelectedTruck] = useState<MapTruckMarker | null>(null);
 
   if (!apiKey) {
     return (
@@ -28,7 +26,7 @@ export const FoodTruckMap = ({ trucks, userLocation }: MapProps) => {
         role="alert"
         aria-label="API key missing"
       >
-        Set <code>NEXT_PUBLIC_GOOGLE_MAPS_API_KEY</code> to display the map.
+        Please set the required API key to display the map.
       </div>
     );
   }
@@ -64,7 +62,7 @@ export const FoodTruckMap = ({ trucks, userLocation }: MapProps) => {
               key={`${t.applicant}-${idx}`}
               position={{ lat: t.latitude, lng: t.longitude }}
               title={`${t.applicant} — ${t.locationdescription}`}
-              onClick={() => setSelectedTruck(t)}
+              onClick={() => onTruckSelect(t)}
             >
               <Pin background="#dc2626" glyphColor="#ffffff" borderColor="#dc2626" />
             </AdvancedMarker>
@@ -73,7 +71,7 @@ export const FoodTruckMap = ({ trucks, userLocation }: MapProps) => {
           {selectedTruck && (
             <InfoWindow
               position={{ lat: selectedTruck.latitude, lng: selectedTruck.longitude }}
-              onCloseClick={() => setSelectedTruck(null)}
+              onCloseClick={() => onTruckSelect(null)}
               headerContent={<div className="font-semibold text-lg">{selectedTruck.applicant}</div>}
             >
               <div className="max-w-[240px] text-black">
