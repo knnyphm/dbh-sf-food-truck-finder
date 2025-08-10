@@ -121,21 +121,16 @@ src/
 │   ├── FoodTruckFinder/  # Main application component
 │   ├── FoodTruckList/    # Food truck listing component
 │   ├── FoodTruckMap/     # Google Maps integration
+│   ├── LocationError/     # Location error display component
+│   ├── LocationLoading/   # Location loading state component
 │   ├── PageLayout/        # Page layout wrapper
 │   └── ui/               # Reusable UI components
 │
 ├── hooks/                # Custom React hooks
-│   └── useFoodTruckFinder.ts  # Food truck data management
+│   └── useFoodTruckFinder/  # Food truck data management hook
 │
-├── lib/                  # Utility libraries
-│   ├── foodTrucks.ts     # Food truck data fetching
-│   └── utils.ts          # General utilities
-│
-├── types/                # TypeScript type definitions
-│   ├── components.ts     # Component prop types
-│   ├── coordinates.ts    # Location types
-│   ├── food-truck.ts     # Food truck data types
-│   └── map.ts           # Map-related types
+├── utils/                # Utility functions
+│   └── foodTruckLocator/  # Food truck location utilities
 │
 └── config/              # Configuration files
     └── maps.ts          # Google Maps configuration

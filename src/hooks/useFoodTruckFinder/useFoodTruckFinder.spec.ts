@@ -54,7 +54,9 @@ describe('useFoodTruckFinder', () => {
     expect(result.current.loading).toBe(false);
     expect(result.current.locating).toBe(false);
     expect(result.current.userLocation).toBe(null);
+    expect(result.current.locationError).toBe(null);
     expect(result.current.radiusMiles).toBe(1);
+    expect(typeof result.current.clearLocationError).toBe('function');
   });
 
   it('should load trucks successfully', async () => {
@@ -102,6 +104,7 @@ describe('useFoodTruckFinder', () => {
 
     expect(mockGeolocation.getCurrentPosition).toHaveBeenCalled();
     expect(result.current.userLocation).toBe(null);
+    expect(result.current.locationError).toBe("Unable to get your location. Please check your browser settings and try again.");
     expect(result.current.trucks).toEqual([]);
   });
 

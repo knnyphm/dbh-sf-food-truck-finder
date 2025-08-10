@@ -33,11 +33,14 @@ describe("FoodTruckFinder", () => {
     mockUseFoodTruckFinder.mockReturnValue({
       trucks: mockTrucks,
       loading: false,
+      locating: false,
       userLocation: null,
+      locationError: null,
       getNearbyTrucks: jest.fn().mockResolvedValue(mockTrucks),
       radiusMiles: 1,
       setRadiusMiles: jest.fn(),
       loadTrucks: jest.fn().mockResolvedValue(mockTrucks),
+      clearLocationError: jest.fn(),
     });
   });
 
@@ -62,11 +65,14 @@ describe("FoodTruckFinder", () => {
     mockUseFoodTruckFinder.mockReturnValue({
       trucks: mockTrucks,
       loading: false,
+      locating: false,
       userLocation: { latitude: 37.7749, longitude: -122.4194 },
+      locationError: null,
       getNearbyTrucks: jest.fn().mockResolvedValue(mockTrucks),
       radiusMiles: 1,
       setRadiusMiles: jest.fn(),
       loadTrucks: jest.fn().mockResolvedValue(mockTrucks),
+      clearLocationError: jest.fn(),
     });
 
     render(<FoodTruckFinder />);
@@ -87,11 +93,14 @@ describe("FoodTruckFinder", () => {
     mockUseFoodTruckFinder.mockReturnValue({
       trucks: [],
       loading: false,
+      locating: false,
       userLocation: null,
+      locationError: null,
       getNearbyTrucks,
       radiusMiles: 1,
       setRadiusMiles: jest.fn(),
       loadTrucks: jest.fn(),
+      clearLocationError: jest.fn(),
     });
 
     render(<FoodTruckFinder />);
