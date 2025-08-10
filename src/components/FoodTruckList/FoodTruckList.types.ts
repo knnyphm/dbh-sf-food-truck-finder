@@ -9,4 +9,6 @@ export interface FoodTruck {
 export interface FoodTruckListProps {
   trucks: FoodTruck[];
   loading: boolean;
+  selectedTruck: FoodTruck | null;
+  onTruckSelect: (truck: FoodTruck | null) => void;
 }
