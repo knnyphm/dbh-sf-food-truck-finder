@@ -12,12 +12,9 @@
   },
   "dependencies": {
     "@radix-ui/react-slider": "^1.3.5",
-    "@react-google-maps/api": "^2.20.7",
     "@vis.gl/react-google-maps": "^1.5.5",
-    "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "geolib": "^3.3.4",
-    "lucide-react": "^0.539.0",
     "next": "15.4.6",
     "react": "19.1.0",
     "react-dom": "19.1.0",
@@ -43,7 +40,6 @@
     "jest-environment-jsdom": "^30.0.5",
     "tailwindcss": "^4",
     "ts-jest": "^29.4.1",
-    "tw-animate-css": "^1.3.6",
     "typescript": "^5"
   }
 }
