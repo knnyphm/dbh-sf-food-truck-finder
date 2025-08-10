@@ -16,10 +16,11 @@ const parseRawFoodTruck = (rawTruckData: RawFoodTruck): FoodTruck | null => {
 
   return {
     applicant: rawTruckData.applicant,
-    locationdescription: rawTruckData.locationdescription,
+    description: rawTruckData.locationdescription,
+    address: rawTruckData.address,
     latitude,
     longitude,
-    fooditems: rawTruckData.fooditems,
+    foodItems: rawTruckData.fooditems,
   };
 };
 

@@ -1,8 +1,7 @@
 "use client";
 
 import { useCallback, useState } from "react";
-import type { FoodTruck, Coordinates } from "./useFoodTruckFinder.types";
-import { fetchNearbyTrucks } from "@/utils/foodTruckLocator";
+import { fetchNearbyTrucks, type FoodTruck, type Coordinates } from "@/utils/foodTruckLocator";
 
 export const useFoodTruckFinder = () => {
   const [trucks, setTrucks] = useState<FoodTruck[]>([]);

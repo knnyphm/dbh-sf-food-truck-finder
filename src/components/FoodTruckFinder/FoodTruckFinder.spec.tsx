@@ -3,7 +3,7 @@
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import { FoodTruckFinder } from "./FoodTruckFinder";
 import { useFoodTruckFinder } from "@/hooks/useFoodTruckFinder";
-import type { FoodTruck } from "./FoodTruckFinder.types";
+import type { FoodTruck } from "@/utils/foodTruckLocator";
 
 jest.mock("@/hooks/useFoodTruckFinder", () => ({
   useFoodTruckFinder: jest.fn(),
@@ -12,17 +12,19 @@ jest.mock("@/hooks/useFoodTruckFinder", () => ({
 const mockTrucks: FoodTruck[] = [
   {
     applicant: "Truck A",
-    fooditems: "tacos, burritos",
+    foodItems: "tacos, burritos",
     latitude: 37.7749,
     longitude: -122.4194,
-    locationdescription: "123 Main St",
+    description: "123 Main St",
+    address: "123 Main St",
   },
   {
     applicant: "Truck B",
-    fooditems: "burgers, fries",
+    foodItems: "burgers, fries",
     latitude: 37.7749,
     longitude: -122.4194,
-    locationdescription: "456 Oak St",
+    description: "456 Oak St",
+    address: "456 Oak St",
   },
 ];
 

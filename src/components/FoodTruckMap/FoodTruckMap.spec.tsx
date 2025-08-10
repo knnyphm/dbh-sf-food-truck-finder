@@ -3,7 +3,7 @@
 import { render, screen, fireEvent } from "@testing-library/react";
 import "@testing-library/jest-dom";
 import { FoodTruckMap } from "./FoodTruckMap";
-import type { FoodTruck } from "../FoodTruckList/FoodTruckList.types";
+import type { FoodTruck } from "@/utils/foodTruckLocator";
 import type { Coordinates } from "./FoodTruckMap.types";
 
 // Mock config state
@@ -31,10 +31,11 @@ jest.mock("@vis.gl/react-google-maps", () => ({
 const mockTrucks: FoodTruck[] = [
   {
     applicant: "Truck A",
-    fooditems: "tacos, burritos",
+    foodItems: "tacos, burritos",
     latitude: 37.7749,
     longitude: -122.4194,
-    locationdescription: "123 Main St",
+    description: "123 Main St",
+    address: "123 Main St",
   },
 ];
 

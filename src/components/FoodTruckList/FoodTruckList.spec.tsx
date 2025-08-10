@@ -3,20 +3,22 @@
 import { render, screen, fireEvent, act } from "@testing-library/react";
 import "@testing-library/jest-dom";
 import { FoodTruckList } from "./FoodTruckList";
-import type { FoodTruck } from "./FoodTruckList.types";
+import type { FoodTruck } from "@/utils/foodTruckLocator";
 
 const mockTrucks: FoodTruck[] = [
   {
     applicant: "Truck A",
-    locationdescription: "123 Main St",
-    fooditems: "tacos, burritos",
+    description: "123 Main St",
+    address: "123 Main St",
+    foodItems: "tacos, burritos",
     latitude: 37.7749,
     longitude: -122.4194,
   },
   {
     applicant: "Truck B",
-    locationdescription: "456 Oak St", 
-    fooditems: "burgers, fries",
+    description: "456 Oak St", 
+    address: "456 Oak St",
+    foodItems: "burgers, fries",
     latitude: 37.7749,
     longitude: -122.4194,
   },
