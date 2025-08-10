@@ -1,30 +1,197 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# SF Food Truck Finder
+
+A modern web application built with Next.js that helps users discover nearby food trucks in San Francisco. The app uses geolocation and interactive maps to provide real-time food truck locations with customizable search radius.
+
+## Features
+
+- 📍 **Location-based Search**: Find food trucks near your current location
+- 🗺️ **Interactive Map**: View food truck locations on an integrated Google Maps interface  
+- 📏 **Adjustable Radius**: Customize search distance with an intuitive slider
+- 📱 **Responsive Design**: Works seamlessly on desktop and mobile devices
+- 📊 **Fresh Data**: Up-to-date food truck locations (refreshed hourly)
+- 🚀 **Optimized Performance**: Server-side caching with 1-hour cache duration to minimize external API calls
+
+## Tech Stack
+
+- **Frontend**: Next.js 15, React 19, TypeScript
+- **Styling**: Tailwind CSS, Radix UI components
+- **Maps**: Google Maps API via `@vis.gl/react-google-maps` (requires API key)
+- **Geolocation**: Browser Geolocation API with Geolib for distance calculations
+- **Testing**: Jest, React Testing Library
+- **Package Manager**: pnpm
 
 ## Getting Started
 
-First, run the development server:
+### Prerequisites
 
-```bash
-pnpm dev
+- Node.js (v18 or higher)
+- pnpm
+- Google Maps API key and Map ID
+
+### Installation
+
+1. Clone the repository
+2. Install dependencies:
+   ```bash
+   pnpm install
+   ```
+
+3. Set up environment variables:
+   ```bash
+   # Copy the sample environment file
+   cp .env.sample .env
+   
+   # Edit .env and add your Google Maps credentials
+   # Get your API key from: https://console.cloud.google.com/
+   # Get your Map ID from: https://console.cloud.google.com/google/maps-apis/configuremaps
+   NEXT_PUBLIC_GOOGLE_MAPS_API_KEY=your_api_key_here
+   NEXT_PUBLIC_GOOGLE_MAPS_MAP_ID=your_map_id_here
+   ```
+
+4. Run the development server:
+   ```bash
+   pnpm dev
+   ```
+
+5. Open [http://localhost:3000](http://localhost:3000) to view the application
+
+### Environment Variables
+
+The application requires the following environment variables to function properly:
+
+| Variable | Description | Required |
+|----------|-------------|----------|
+| `NEXT_PUBLIC_GOOGLE_MAPS_API_KEY` | Google Maps API key for map functionality | Yes |
+| `NEXT_PUBLIC_GOOGLE_MAPS_MAP_ID` | Google Maps Map ID for custom styling | Yes |
+
+**Note**: These variables are prefixed with `NEXT_PUBLIC_` because they need to be accessible in the browser for the Google Maps integration to work.
+
+### Available Scripts
+
+- `pnpm dev` - Start development server
+- `pnpm build` - Build for production
+- `pnpm start` - Start production server
+- `pnpm lint` - Run ESLint
+- `pnpm test` - Run tests
+- `pnpm type-check` - Run TypeScript type checking
+
+## CI/CD
+
+This project uses GitHub Actions for continuous integration. The CI pipeline runs on every pull request and push to the main branch, ensuring code quality and preventing broken code from being merged.
+
+### Required Status Checks
+
+To enable branch protection and block merges when tests fail:
+
+1. Go to your GitHub repository settings
+2. Navigate to **Settings > Branches**
+3. Add a rule for the `main` branch
+4. Enable the following protections:
+   - ✅ **Require status checks to pass before merging**
+   - ✅ **Require branches to be up to date before merging**
+   - ✅ **Restrict pushes that create files**
+   - ✅ **Restrict deletions**
+   - ✅ **Require linear history** (recommended)
+
+5. Search for and select the **"test"** status check (from the CI workflow)
+6. Save the rule
+
+### CI Workflow
+
+The CI workflow (`/.github/workflows/ci.yml`) runs the following checks:
+- **Type checking** - Ensures TypeScript compilation passes
+- **Linting** - Runs ESLint to check code style and quality
+- **Testing** - Executes Jest test suite
+- **Build** - Verifies the application builds successfully
+
+All checks must pass before a pull request can be merged.
+
+## Project Structure
+
+```
+src/
+├── app/                    # Next.js App Router
+│   ├── api/               # API routes
+│   │   └── food-trucks/   # Food truck data endpoints (1-hour server cache)
+│   ├── globals.css        # Global styles
+│   ├── layout.tsx         # Root layout component
+│   └── page.tsx          # Home page
+│
+├── components/            # React components
+│   ├── FoodTruckFinder/  # Main application component
+│   ├── FoodTruckList/    # Food truck listing component
+│   ├── FoodTruckMap/     # Google Maps integration
+│   ├── PageLayout/        # Page layout wrapper
+│   └── ui/               # Reusable UI components
+│
+├── hooks/                # Custom React hooks
+│   └── useFoodTruckFinder.ts  # Food truck data management
+│
+├── lib/                  # Utility libraries
+│   ├── foodTrucks.ts     # Food truck data fetching
+│   └── utils.ts          # General utilities
+│
+├── types/                # TypeScript type definitions
+│   ├── components.ts     # Component prop types
+│   ├── coordinates.ts    # Location types
+│   ├── food-truck.ts     # Food truck data types
+│   └── map.ts           # Map-related types
+│
+└── config/              # Configuration files
+    └── maps.ts          # Google Maps configuration
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## How to Contribute
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+We welcome contributions! Here's how to get started:
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### 1. Development Workflow
 
-## Learn More
+1. **Fork and Clone**: Fork the repository and clone your fork locally
+2. **Create a Branch**: Create a feature branch from `main`
+   ```bash
+   git checkout -b feature/your-feature-name
+   ```
+3. **Make Changes**: Implement your changes following our coding standards
+4. **Test**: Ensure all tests pass and add new tests for your changes
+   ```bash
+   pnpm test
+   pnpm lint
+   ```
+5. **Commit**: Use clear, descriptive commit messages
+6. **Push and PR**: Push to your fork and create a pull request
 
-To learn more about Next.js, take a look at the following resources:
+### 2. Code Standards
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- **TypeScript**: All code must be properly typed
+- **Testing**: Write unit tests for new components and functions
+- **Linting**: Code must pass ESLint checks
+- **Components**: Follow the existing component structure and naming conventions
+- **Hooks**: Custom hooks should be thoroughly tested and documented
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### 3. Areas for Contribution
 
-## Deploy on Vercel
+- **Features**: New functionality like filters, favorites, or food truck details
+- **UI/UX**: Improve design, accessibility, or user experience
+- **Performance**: Optimize loading times, bundle size, or rendering
+- **Testing**: Increase test coverage or improve test quality
+- **Documentation**: Improve code comments, README, or add guides
+- **Bug Fixes**: Address issues in the GitHub issue tracker
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+### 4. Component Guidelines
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- Place components in their own directories with an `index.tsx` export
+- Use descriptive, purpose-specific names (e.g., `FoodTruckMap` instead of generic `Map`)
+- Include corresponding test files (`.spec.tsx`)
+- Use TypeScript interfaces for all props
+- Follow the existing patterns for state management and data fetching
+
+### 5. Getting Help
+
+- Check existing issues and pull requests before starting work
+- Ask questions in issue comments or discussions
+- Follow the existing code patterns and architecture
+
+## License
+
+This project is open source and available under the MIT License.

@@ -2,33 +2,29 @@
 
 import { render, screen } from "@testing-library/react";
 import { FoodTruckList } from "./FoodTruckList";
-import type { FoodTruck } from "@/types/food-truck";
+import type { FoodTruck } from "./FoodTruckList.types";
 
 const mockTrucks: FoodTruck[] = [
   {
-    objectid: "1",
     applicant: "Truck A",
+    locationdescription: "123 Main St",
     fooditems: "tacos, burritos",
-    latitude: "37.7749",
-    longitude: "-122.4194",
-    schedule: "http://example.com/schedule-a",
-    address: "123 Main St",
+    latitude: 37.7749,
+    longitude: -122.4194,
   },
   {
-    objectid: "2",
     applicant: "Truck B",
+    locationdescription: "456 Oak St", 
     fooditems: "burgers, fries",
-    latitude: "37.7749",
-    longitude: "-122.4194",
-    schedule: "http://example.com/schedule-b",
-    address: "456 Oak St",
+    latitude: 37.7749,
+    longitude: -122.4194,
   },
 ];
 
 describe("FoodTruckList", () => {
-  it("renders a loading message when loading", () => {
+  it("renders skeleton loader when loading", () => {
     render(<FoodTruckList trucks={[]} loading={true} />);
-    expect(screen.getByText("Loading nearby food trucks…")).toBeInTheDocument();
+    expect(document.querySelector('.animate-pulse')).toBeInTheDocument();
   });
 
   it("renders a message when no trucks are found", () => {

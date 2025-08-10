@@ -1,14 +1,13 @@
 import { getDistance, orderByDistance } from "geolib";
-import type { FoodTruck, RawFoodTruck } from "@/types/food-truck";
-import type { Coordinates } from "@/types/coordinates";
+import type { FoodTruck, RawFoodTruck, Coordinates } from "./foodTruckLocator.types";
 
 const METERS_PER_MILE = 1609.344;
 
-function milesToMeters(miles: number): number {
+const milesToMeters = (miles: number): number => {
   return Math.max(0, miles) * METERS_PER_MILE;
-}
+};
 
-function parseRawFoodTruck(rawTruckData: RawFoodTruck): FoodTruck | null {
+const parseRawFoodTruck = (rawTruckData: RawFoodTruck): FoodTruck | null => {
   const latitude = parseFloat(rawTruckData.latitude);
   const longitude = parseFloat(rawTruckData.longitude);
   if (!Number.isFinite(latitude) || !Number.isFinite(longitude)) {
@@ -22,13 +21,13 @@ function parseRawFoodTruck(rawTruckData: RawFoodTruck): FoodTruck | null {
     longitude,
     fooditems: rawTruckData.fooditems,
   };
-}
+};
 
-function filterTrucksWithinRadius(
+const filterTrucksWithinRadius = (
   trucks: FoodTruck[],
   center: Coordinates,
   maxDistanceMeters: number
-): FoodTruck[] {
+): FoodTruck[] => {
   return trucks.filter((truck) => {
     const distance = getDistance(center, {
       latitude: truck.latitude,
@@ -36,13 +35,13 @@ function filterTrucksWithinRadius(
     });
     return distance <= maxDistanceMeters;
   });
-}
+};
 
-export async function fetchNearbyTrucks(
+export const fetchNearbyTrucks = async (
   latitude: number,
   longitude: number,
   radiusMiles: number = 1
-): Promise<FoodTruck[]> {
+): Promise<FoodTruck[]> => {
   // Fetch the cached raw dataset from the server route
   const res = await fetch(`/api/food-trucks`);
   if (!res.ok) {
@@ -65,4 +64,4 @@ export async function fetchNearbyTrucks(
 
   const sorted = orderByDistance(userLocation, validTrucks);
   return sorted as FoodTruck[];
-}
+};

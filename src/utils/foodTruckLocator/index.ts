@@ -1,0 +1,1 @@
+export { fetchNearbyTrucks } from "./foodTruckLocator";
