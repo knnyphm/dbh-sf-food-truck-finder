@@ -1,14 +1,16 @@
 export interface FoodTruck {
   applicant: string;
-  locationdescription: string;
+  description: string;
+  address: string;
   latitude: number;
   longitude: number;
-  fooditems?: string;
+  foodItems?: string;
 }
 
 export interface RawFoodTruck {
   applicant: string;
   locationdescription: string;
+  address: string;
   latitude: string;
   longitude: string;
   fooditems?: string;

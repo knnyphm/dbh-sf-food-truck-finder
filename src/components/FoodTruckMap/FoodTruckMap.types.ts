@@ -1,17 +1,13 @@
+import type { FoodTruck } from "@/utils/foodTruckLocator";
+
 export interface Coordinates {
   latitude: number;
   longitude: number;
 }
 
-export interface MapTruckMarker extends Coordinates {
-  applicant: string;
-  locationdescription: string;
-  fooditems?: string;
-}
-
 export interface MapProps {
-  trucks: MapTruckMarker[];
+  trucks: FoodTruck[];
   userLocation: Coordinates;
-  selectedTruck: MapTruckMarker | null;
-  onTruckSelect: (truck: MapTruckMarker | null) => void;
+  selectedTruck: FoodTruck | null;
+  onTruckSelect: (truck: FoodTruck | null) => void;
 }

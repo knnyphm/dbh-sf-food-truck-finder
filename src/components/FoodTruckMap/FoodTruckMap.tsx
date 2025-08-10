@@ -61,7 +61,7 @@ export const FoodTruckMap = ({ trucks, userLocation, selectedTruck, onTruckSelec
             <AdvancedMarker
               key={`${t.applicant}-${idx}`}
               position={{ lat: t.latitude, lng: t.longitude }}
-              title={`${t.applicant} — ${t.locationdescription}`}
+              title={`${t.applicant} — ${t.description}`}
               onClick={() => onTruckSelect(t)}
             >
               <Pin background="#dc2626" glyphColor="#ffffff" borderColor="#dc2626" />
@@ -75,10 +75,10 @@ export const FoodTruckMap = ({ trucks, userLocation, selectedTruck, onTruckSelec
               headerContent={<div className="font-semibold text-lg">{selectedTruck.applicant}</div>}
             >
               <div className="max-w-[240px] text-black">
-                <div className="text-xs">{selectedTruck.locationdescription}</div>
-                {selectedTruck.fooditems && (
+                <div className="text-xs">{selectedTruck.address}</div>
+                {selectedTruck.foodItems && (
                   <div className="text-xs italic mt-1 whitespace-pre-wrap break-words">
-                    {selectedTruck.fooditems}
+                    {selectedTruck.foodItems}
                   </div>
                 )}
               </div>

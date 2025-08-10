@@ -1,5 +1,6 @@
 import { useRef, useEffect } from "react";
-import type { FoodTruckListProps, FoodTruck } from "./FoodTruckList.types";
+import type { FoodTruckListProps } from "./FoodTruckList.types";
+import type { FoodTruck } from "@/utils/foodTruckLocator";
 import { FoodTruckListSkeleton } from "./FoodTruckList.skeleton";
 
 export const FoodTruckList = ({ trucks, loading, selectedTruck, onTruckSelect }: FoodTruckListProps) => {
@@ -57,9 +58,9 @@ export const FoodTruckList = ({ trucks, loading, selectedTruck, onTruckSelect }:
           onClick={() => handleTruckClick(truck)}
         >
           <h2 className="text-lg font-semibold">{truck.applicant}</h2>
-          <p className="text-sm text-gray-600">{truck.locationdescription}</p>
-          {truck.fooditems && (
-            <p className="mt-2 text-sm italic text-gray-500">{truck.fooditems}</p>
+          <p className="text-sm text-gray-600">{truck.address}</p>
+          {truck.foodItems && (
+            <p className="mt-2 text-sm italic text-gray-500">{truck.foodItems}</p>
           )}
         </li>
       ))}

@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import dynamic from "next/dynamic";
-import type { FoodTruck } from "./FoodTruckFinder.types";
+import type { FoodTruck } from "@/utils/foodTruckLocator";
 import { useFoodTruckFinder } from "@/hooks/useFoodTruckFinder";
 import { FoodTruckList } from "@/components/FoodTruckList";
 import { Slider } from "@/components/ui/Slider";
@@ -64,7 +64,7 @@ export const FoodTruckFinder = () => {
     const normalizedSearchTerm = foodItemSearchTerm.toLowerCase();
     setFilteredFoodTrucks(
       trucks.filter((truck) =>
-        (truck.fooditems || "").toLowerCase().includes(normalizedSearchTerm)
+        (truck.foodItems || "").toLowerCase().includes(normalizedSearchTerm)
       )
     );
   }, [foodItemSearchTerm, trucks]);

@@ -24,6 +24,7 @@ describe('foodTruckLocator', () => {
       {
         applicant: 'Taco Truck 1',
         locationdescription: '123 Main St',
+        address: '123 Main St',
         latitude: '37.7749',
         longitude: '-122.4194',
         fooditems: 'Tacos, Burritos'
@@ -31,6 +32,7 @@ describe('foodTruckLocator', () => {
       {
         applicant: 'Burger Truck 2',
         locationdescription: '456 Oak Ave',
+        address: '456 Oak Ave',
         latitude: '37.7849',
         longitude: '-122.4094',
         fooditems: 'Burgers, Fries'
@@ -38,6 +40,7 @@ describe('foodTruckLocator', () => {
       {
         applicant: 'Invalid Truck',
         locationdescription: 'Invalid Location',
+        address: 'Invalid Location',
         latitude: 'invalid',
         longitude: 'invalid',
         fooditems: 'Invalid Food'
@@ -47,17 +50,19 @@ describe('foodTruckLocator', () => {
     const mockParsedTrucks: FoodTruck[] = [
       {
         applicant: 'Taco Truck 1',
-        locationdescription: '123 Main St',
+        description: '123 Main St',
+        address: '123 Main St',
         latitude: 37.7749,
         longitude: -122.4194,
-        fooditems: 'Tacos, Burritos'
+        foodItems: 'Tacos, Burritos'
       },
       {
         applicant: 'Burger Truck 2',
-        locationdescription: '456 Oak Ave',
+        description: '456 Oak Ave',
+        address: '456 Oak Ave',
         latitude: 37.7849,
         longitude: -122.4094,
-        fooditems: 'Burgers, Fries'
+        foodItems: 'Burgers, Fries'
       }
     ];
 
@@ -197,6 +202,7 @@ describe('foodTruckLocator', () => {
         {
           applicant: 'Invalid Truck 1',
           locationdescription: 'Invalid Location 1',
+          address: 'Invalid Location 1',
           latitude: 'invalid',
           longitude: 'invalid',
           fooditems: 'Invalid Food 1'
@@ -204,6 +210,7 @@ describe('foodTruckLocator', () => {
         {
           applicant: 'Invalid Truck 2',
           locationdescription: 'Invalid Location 2',
+          address: 'Invalid Location 2',
           latitude: 'NaN',
           longitude: 'Infinity',
           fooditems: 'Invalid Food 2'
