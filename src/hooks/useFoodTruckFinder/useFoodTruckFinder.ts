@@ -74,9 +74,9 @@ export const useFoodTruckFinder = () => {
     }
   }, [getCurrentLocation, loadTrucks]);
 
-  const clearLocationError = useCallback(() => {
+  const clearLocationError = () => {
     setLocationError(null);
-  }, []);
+  };
 
   return {
     trucks,
