@@ -10,6 +10,7 @@ export const useFoodTruckFinder = () => {
   const [userLocation, setUserLocation] = useState<Coordinates | null>(null);
   const [radiusMiles, setRadiusMiles] = useState<number>(1);
   const [locating, setLocating] = useState<boolean>(false);
+  const [locationError, setLocationError] = useState<string | null>(null);
 
   const loadTrucks = useCallback(
     async (latitude: number, longitude: number, radius?: number) => {
@@ -34,8 +35,11 @@ export const useFoodTruckFinder = () => {
 
   const getCurrentLocation = useCallback(async (): Promise<Coordinates> => {
     setLocating(true);
+    setLocationError(null);
+    
     if (!navigator.geolocation) {
       setLocating(false);
+      setLocationError("Geolocation is not supported by your browser");
       throw new Error("Geolocation not supported");
     }
 
@@ -51,9 +55,12 @@ export const useFoodTruckFinder = () => {
       setUserLocation(coords);
       setLocating(false);
       return coords;
-    } catch (error) {
+    } catch (error: unknown) {
       console.error("Geolocation error:", error);
       setLocating(false);
+      
+      setLocationError("Unable to get your location. Please check your browser settings and try again.");
+      
       throw error;
     }
   }, []);
@@ -68,14 +75,20 @@ export const useFoodTruckFinder = () => {
     }
   }, [getCurrentLocation, loadTrucks]);
 
+  const clearLocationError = useCallback(() => {
+    setLocationError(null);
+  }, []);
+
   return {
     trucks,
     loading,
     locating,
     userLocation,
+    locationError,
     loadTrucks,
     getNearbyTrucks,
     radiusMiles,
     setRadiusMiles,
+    clearLocationError,
   };
 }
