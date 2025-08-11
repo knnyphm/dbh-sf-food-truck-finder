@@ -20,7 +20,6 @@ export const FoodTruckFinder = () => {
     getNearbyTrucks, 
     radiusMiles, 
     setRadiusMiles, 
-    loadTrucks,
     clearLocationError
   } = useFoodTruckFinder();
   
@@ -50,7 +49,7 @@ export const FoodTruckFinder = () => {
     const selectedRadiusMiles = radiusValues[0] ?? 1;
     setRadiusMiles(selectedRadiusMiles);
     if (userLocation) {
-      const trucksInRadius = await loadTrucks(userLocation.latitude, userLocation.longitude, selectedRadiusMiles);
+      const trucksInRadius = await getNearbyTrucks(userLocation, selectedRadiusMiles);
       setFilteredFoodTrucks(trucksInRadius);
     }
   };

@@ -11,27 +11,6 @@ export const useFoodTruckFinder = () => {
   const [locating, setLocating] = useState<boolean>(false);
   const [locationError, setLocationError] = useState<string | null>(null);
 
-  const loadTrucks = useCallback(
-    async (latitude: number, longitude: number, radius?: number) => {
-      setLoading(true);
-      try {
-        const nearby = await fetchNearbyTrucks(
-          latitude,
-          longitude,
-          radius ?? radiusMiles
-        );
-        setTrucks(nearby);
-        return nearby;
-      } catch (error) {
-        console.error("Error fetching food trucks:", error);
-        return [];
-      } finally {
-        setLoading(false);
-      }
-    },
-    [radiusMiles]
-  );
-
   const getCurrentLocation = useCallback(async (): Promise<Coordinates> => {
     setLocating(true);
     setLocationError(null);
@@ -64,15 +43,33 @@ export const useFoodTruckFinder = () => {
     }
   }, []);
 
-  const getNearbyTrucks = useCallback(async () => {
+  const getNearbyTrucks = useCallback(async (coordinates?: Coordinates, radius?: number) => {
+    setLoading(true);
     try {
-      const { latitude, longitude } = await getCurrentLocation();
-      return loadTrucks(latitude, longitude);
+      let coords: Coordinates;
+      
+      if (coordinates) {
+        // Use provided coordinates
+        coords = coordinates;
+      } else {
+        // Get current location if no coordinates provided
+        coords = await getCurrentLocation();
+      }
+      
+      const nearby = await fetchNearbyTrucks(
+        coords.latitude,
+        coords.longitude,
+        radius ?? radiusMiles
+      );
+      setTrucks(nearby);
+      return nearby;
     } catch (error) {
-      console.error("Failed to use current location:", error);
+      console.error("Error fetching food trucks:", error);
       return [];
+    } finally {
+      setLoading(false);
     }
-  }, [getCurrentLocation, loadTrucks]);
+  }, [getCurrentLocation, radiusMiles]);
 
   const clearLocationError = () => {
     setLocationError(null);
@@ -84,7 +81,6 @@ export const useFoodTruckFinder = () => {
     locating,
     userLocation,
     locationError,
-    loadTrucks,
     getNearbyTrucks,
     radiusMiles,
     setRadiusMiles,
