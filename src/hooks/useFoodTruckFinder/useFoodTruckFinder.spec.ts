@@ -63,7 +63,7 @@ describe('useFoodTruckFinder', () => {
     const { result } = renderHook(() => useFoodTruckFinder());
 
     await act(async () => {
-      await result.current.loadTrucks(37.7749, -122.4194);
+      await result.current.getNearbyTrucks({ latitude: 37.7749, longitude: -122.4194 });
     });
 
     expect(fetchNearbyTrucks).toHaveBeenCalledWith(37.7749, -122.4194, 1);
@@ -116,9 +116,9 @@ describe('useFoodTruckFinder', () => {
       result.current.setRadiusMiles(newRadius);
     });
 
-    // Need to wait for state update before calling loadTrucks
+    // Need to wait for state update before calling getNearbyTrucks
     await act(async () => {
-      await result.current.loadTrucks(37.7749, -122.4194);
+      await result.current.getNearbyTrucks({ latitude: 37.7749, longitude: -122.4194 });
     });
 
     expect(fetchNearbyTrucks).toHaveBeenCalledWith(37.7749, -122.4194, newRadius);
